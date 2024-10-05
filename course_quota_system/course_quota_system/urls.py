@@ -22,6 +22,7 @@ from quota import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('quota/', include('quota.urls')),
     path('quota/student_requests/',views.student_quota_list, name='student_quota_list'),
     path('quota/cancel/<int:quota_request_id>/', views.cancel_quota, name='cancel_quota'),

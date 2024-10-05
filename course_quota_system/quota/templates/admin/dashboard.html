@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Quota Management Dashboard</h1>
+
+    <h2>Statistics</h2>
+    <ul>
+        <li>Total Courses: {{ stats.total_courses }}</li>
+        <li>Total Requests: {{ stats.total_requests }}</li>
+        <li>Approved Requests: {{ stats.approved_requests }}</li>
+        <li>Pending Requests: {{ stats.pending_requests }}</li>
+        <li>Canceled Requests: {{ stats.canceled_requests }}</li>
+    </ul>
+
+    <h2>Course Quotas</h2>
+    <table>
+        <tr>
+            <th>Course Name</th>
+            <th>Total Quota</th>
+            <th>Available Seats</th>
+            <th>Students</th>
+        </tr>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.name }}</td>
+            <td>{{ course.total_quota }}</td>
+            <td>{{ course.available_seats }}</td>
+            <td>
+                <ul>
+                    {% for request in quota_requests %}
+                        {% if request.course == course %}
+                            <li>{{ request.student.username }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
