@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Quota Requests</title>
+</head>
+<body>
+    <h1>Your Quota Requests</h1>
+    
+    <ul>
+        {% for quota_request in quota_requests %}
+            <li>
+                <strong>{{ quota_request.course.name }}</strong> 
+                (Code: {{ quota_request.course.code }}) - 
+                Seats Requested: 1
+                <br>
+                <!-- Cancel Quota link -->
+                <a href="{% url 'cancel_quota' quota_request.id %}">Cancel Quota</a>
+            </li>
+        {% empty %}
+            <li>You have not requested any quotas yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

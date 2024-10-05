@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Courses</title>
+</head>
+<body>
+    <h1>Available Courses for Quota Requests</h1>
+    <ul>
+        {% for course in courses %}
+            <li>
+                <strong>{{ course.name }}</strong> (Code: {{ course.code }}) - 
+                Seats Available: {{ course.available_seats }}
+                <br>
+                <!-- Link that passes course_id in the URL to request quota -->
+                <a href="{% url 'request_quota' course.id %}">Request Quota</a>
+            </li>
+        {% empty %}
+            <li>No courses are available at the moment.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
