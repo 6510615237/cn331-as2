@@ -4,23 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Quota Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #FF6B6B, #FFD93D, #FFAB40, #6A0572); /* ไล่สีพระอาทิตย์ตก */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* พื้นหลังโปร่งใส */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #FF6B6B; /* สีหัวข้อเป็นสีส้มแดง */
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #FFF3E6; /* พื้นหลังสีเหลืองอ่อน */
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            color: #333;
+        }
+        a {
+            color: #FF6B6B; /* ลิงก์สีส้มแดง */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .empty-message {
+            color: #6A0572; /* ข้อความแจ้งเตือนสีม่วงเข้ม */
+        }
+    </style>
 </head>
 <body>
-    <h1>Your Quota Requests</h1>
-    
-    <ul>
-        {% for quota_request in quota_requests %}
-            <li>
-                <strong>{{ quota_request.course.name }}</strong> 
-                (Code: {{ quota_request.course.code }}) - 
-                Seats Requested: 1
-                <br>
-                <!-- Cancel Quota link -->
-                <a href="{% url 'cancel_quota' quota_request.id %}">Cancel Quota</a>
-            </li>
-        {% empty %}
-            <li>You have not requested any quotas yet.</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Your Quota Requests</h1>
+        
+        <ul>
+            {% for quota_request in quota_requests %}
+                <li>
+                    <strong>{{ quota_request.course.name }}</strong> 
+                    (Code: {{ quota_request.course.code }}) - 
+                    Seats Requested: 1
+                    <br>
+                    <!-- Cancel Quota link -->
+                    <a href="{% url 'cancel_quota' quota_request.id %}">Cancel Quota</a>
+                </li>
+            {% empty %}
+                <li class="empty-message">You have not requested any quotas yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

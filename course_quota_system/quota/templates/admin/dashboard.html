@@ -4,43 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #FF6B6B, #FFD93D, #FFAB40, #6A0572); /* ไล่สีพระอาทิตย์ตก */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.85); /* กล่องโปร่งใสเล็กน้อย */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25); /* เพิ่มเงา */
+            max-width: 1200px;
+            width: 100%;
+        }
+        h1, h2 {
+            color: #FF6B6B; /* สีหัวข้อเป็นส้มแดง */
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ตัวอักษร */
+        }
+        h2 {
+            font-size: 2em;
+            margin-top: 20px;
+        }
+        .stats-list {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .stats-list li {
+            background-color: #FFF3E6; /* พื้นหลังสถิติ */
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 20%;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 1.1em;
+        }
+        th {
+            background-color: #FF6B6B; /* หัวตารางเป็นสีส้มแดง */
+            color: white;
+            text-align: center;
+            font-size: 1.3em;
+        }
+        td {
+            background-color: #FFF3E6; /* พื้นหลังเซลล์เป็นสีเหลืองอ่อน */
+        }
+        tr:nth-child(even) td {
+            background-color: #FFD93D; /* แถวสลับสี */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            color: #333;
+            font-size: 1em;
+        }
+        a {
+            text-decoration: none;
+            color: #FF6B6B;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FF6B6B;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #FFAB40;
+        }
+    </style>
 </head>
 <body>
-    <h1>Quota Management Dashboard</h1>
+    <div class="container">
+        <h1>Quota Management Dashboard</h1>
 
-    <h2>Statistics</h2>
-    <ul>
-        <li>Total Courses: {{ stats.total_courses }}</li>
-        <li>Total Requests: {{ stats.total_requests }}</li>
-        <li>Approved Requests: {{ stats.approved_requests }}</li>
-        <li>Pending Requests: {{ stats.pending_requests }}</li>
-        <li>Canceled Requests: {{ stats.canceled_requests }}</li>
-    </ul>
+        <h2>Statistics</h2>
+        <ul class="stats-list">
+            <li>Total Courses: {{ stats.total_courses }}</li>
+            <li>Total Requests: {{ stats.total_requests }}</li>
+            <li>Approved Requests: {{ stats.approved_requests }}</li>
+            <li>Pending Requests: {{ stats.pending_requests }}</li>
+            <li>Canceled Requests: {{ stats.canceled_requests }}</li>
+        </ul>
 
-    <h2>Course Quotas</h2>
-    <table>
-        <tr>
-            <th>Course Name</th>
-            <th>Total Quota</th>
-            <th>Available Seats</th>
-            <th>Students</th>
-        </tr>
-        {% for course in courses %}
-        <tr>
-            <td>{{ course.name }}</td>
-            <td>{{ course.total_quota }}</td>
-            <td>{{ course.available_seats }}</td>
-            <td>
-                <ul>
-                    {% for request in quota_requests %}
-                        {% if request.course == course %}
-                            <li>{{ request.student.username }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        <h2>Course Quotas</h2>
+        <table>
+            <tr>
+                <th>Course Name</th>
+                <th>Total Quota</th>
+                <th>Available Seats</th>
+                <th>Students</th>
+            </tr>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.name }}</td>
+                <td>{{ course.total_quota }}</td>
+                <td>{{ course.available_seats }}</td>
+                <td>
+                    <ul>
+                        {% for request in quota_requests %}
+                            {% if request.course == course %}
+                                <li>{{ request.student.username }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 </html>

@@ -4,21 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Available Courses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #FF6B6B, #FFD93D, #FFAB40, #6A0572); /* ไล่เฉดสีพระอาทิตย์ตก */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* กล่องโปร่งใส */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* เงา */
+            max-width: 700px;
+            width: 100%;
+        }
+        h1 {
+            color: #FF6B6B; /* หัวข้อสีส้มแดง */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #FFF3E6; /* พื้นหลังรายการเป็นสีอ่อน */
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            color: #333;
+        }
+        a {
+            color: #CC33FF; /* ลิงก์สีส้มแดง */
+            text-decoration: none;
+            font-style: italic; /* ตัวเอียง */
+            text-transform: uppercase; /* พิมพ์ใหญ่ */
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .empty-message {
+            color: #6A0572; /* ข้อความเมื่อไม่มีคอร์ส */
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Available Courses for Quota Requests</h1>
-    <ul>
-        {% for course in courses %}
-            <li>
-                <strong>{{ course.name }}</strong> (Code: {{ course.code }}) - 
-                Seats Available: {{ course.available_seats }}
-                <br>
-                <!-- Link that passes course_id in the URL to request quota -->
-                <a href="{% url 'request_quota' course.id %}">Request Quota</a>
-            </li>
-        {% empty %}
-            <li>No courses are available at the moment.</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Available Courses for Quota Requests</h1>
+        <ul>
+            {% for course in courses %}
+                <li>
+                    <strong>{{ course.name }}</strong> (Code: {{ course.code }}) - 
+                    Seats Available: {{ course.available_seats }}
+                    <br>
+                    <!-- Link that passes course_id in the URL to request quota -->
+                    <a href="{% url 'request_quota' course.id %}">Request Quota here</a>
+                </li>
+            {% empty %}
+                <li class="empty-message">No courses are available at the moment.</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
