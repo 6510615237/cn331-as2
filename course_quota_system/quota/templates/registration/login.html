@@ -4,20 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #FF6B6B, #FFD93D, #FFAB40, #6A0572); /* สีไล่เฉดจากสีส้มไปม่วงเหมือนพระอาทิตย์ตก */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* กล่องฟอร์มมีพื้นหลังโปร่งใสเล็กน้อย */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* เงาให้ดูมีมิติ */
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: #FF6B6B; /* สีส้มแดงสื่อถึงแสงพระอาทิตย์ */
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+            color: #444; /* สีข้อความเข้มเล็กน้อย */
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #FFF3E6; /* ช่องกรอกสีอ่อนเหมือนแสงแดด */
+            color: #333;
+            font-size: 16px;
+        }
+        input::placeholder {
+            color: #999; /* สี placeholder จางลง */
+        }
+        button {
+            padding: 10px;
+            background-color: #FF6B6B; /* ปุ่มสีส้มแดง */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ff856b; /* ปุ่มเปลี่ยนสีเป็นส้มอ่อนเมื่อ hover */
+        }
+        p {
+            text-align: center;
+            color: #FF6B6B; /* ข้อความแจ้งเตือนสีส้มแดง */
+        }
+    </style>
 </head>
 <body>
-    <h2>Student Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
-        <button type="submit">Login</button>
-    </form>
+    <div class="container">
+        <h2>Student Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required><br>
+            <button type="submit">Login</button>
+        </form>
 
-    {% if form.errors %}
-        <p style="color:red;">Invalid credentials. Please try again.</p>
-    {% endif %}
+        {% if form.errors %}
+            <p>Invalid credentials. Please try again.</p>
+        {% endif %}
+    </div>
 </body>
 </html>
