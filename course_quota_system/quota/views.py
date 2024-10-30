@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from .models import Course, QuotaRequest
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+
 
 @login_required
 def course_list(request):
@@ -35,11 +37,10 @@ def student_quota_list(request):
     # Render the student's quota request page
     return render(request, 'quota/student_quota_list.html', {'quota_requests': quota_requests})
 
-@user_passes_test(lambda u: u.is_staff)
+@user_passes_test(lambda u: u.is_staff, login_url=None)
 def admin_dashboard(request):
     if not request.user.is_staff:
-        return render(request, '403.html')  # Handle unauthorized access
-
+        return render(request, '403.html', status=403)
     courses = Course.objects.all()
     quota_requests = QuotaRequest.objects.all()
 
@@ -58,3 +59,4 @@ def admin_dashboard(request):
         'quota_requests': quota_requests,
     }
     return render(request, 'admin/dashboard.html', context)
+
