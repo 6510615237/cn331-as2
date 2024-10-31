@@ -66,7 +66,6 @@ class CourseViewsTest(TestCase):
             available_seats=5,
             is_open=True
         )
-
     def test_course_list_view(self):
         """Test the course list view for available courses."""
         self.client.login(username="student", password="11111111")
@@ -137,7 +136,7 @@ class RequestQuotaViewTest(TestCase):
         
 
 
-
+# fix line 41
 class CancelQuotaViewTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -148,7 +147,7 @@ class CancelQuotaViewTest(TestCase):
             semester="1",
             academic_year=2024,
             total_quota=15,
-            available_seats=1,  # Only 1 seat initially
+            available_seats=1,  
             is_open=True
         )
         # Create a quota request to be canceled
@@ -159,7 +158,7 @@ class CancelQuotaViewTest(TestCase):
         self.client.login(username="student", password="11111111")
         response = self.client.post(reverse('cancel_quota', args=[self.quota_request.id]))
         
-        # Confirm redirect and updated seat count
+        # Verify that it update seat count
         self.assertEqual(response.status_code, 302)
         self.course.refresh_from_db()
         self.assertEqual(self.course.available_seats, 2)
