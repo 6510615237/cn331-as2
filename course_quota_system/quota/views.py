@@ -39,8 +39,6 @@ def student_quota_list(request):
 
 @user_passes_test(lambda u: u.is_staff, login_url=None)
 def admin_dashboard(request):
-    if not request.user.is_staff:
-        return render(request, '403.html', status=403)
     courses = Course.objects.all()
     quota_requests = QuotaRequest.objects.all()
 

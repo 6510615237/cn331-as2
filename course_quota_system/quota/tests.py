@@ -30,11 +30,11 @@ class CourseModelTest(TestCase):
 class QuotaRequestModelTest(TestCase):
     def setUp(self):
         # Create user and course for the quota request
-        self.student = User.objects.create_user(username="student1", password="testpassword")
+        self.student = User.objects.create_user(username="student", password="11111111")
         self.course = Course.objects.create(
-            code="CS102",
-            name="Advanced Topics",
-            semester="Spring",
+            code="CN331",
+            name="Software Engineering",
+            semester="1",
             academic_year=2024,
             total_quota=20,
             available_seats=5,
@@ -51,20 +51,18 @@ class QuotaRequestModelTest(TestCase):
     def test_quota_request_str(self):
         """Test the string representation of a quota request."""
         quota_request = QuotaRequest.objects.create(student=self.student, course=self.course)
-        self.assertEqual(str(quota_request), "student1 - Advanced Topics")
+        self.assertEqual(str(quota_request), "student - Software Engineering")
 
 
 class CourseViewsTest(TestCase):
     def setUp(self):
-        # Set up client, user, and courses
         self.client = Client()
-        self.student = User.objects.create_user(username="student1", password="testpassword")
-        self.admin = User.objects.create_user(username="admin", password="adminpassword", is_staff=True)
-        
+        self.student = User.objects.create_user(username="student", password="11111111")
+        self.admin = User.objects.create_user(username="admin", password="00000000", is_staff=True)
         self.course = Course.objects.create(
-            code="CS103",
-            name="Machine Learning",
-            semester="Fall",
+            code="CN331",
+            name="Software Engineering",
+            semester="1",
             academic_year=2024,
             total_quota=10,
             available_seats=5,
@@ -73,14 +71,14 @@ class CourseViewsTest(TestCase):
 
     def test_course_list_view(self):
         """Test the course list view for available courses."""
-        self.client.login(username="student1", password="testpassword")
+        self.client.login(username="student", password="11111111")
         response = self.client.get(reverse('course_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Machine Learning")
+        self.assertContains(response, "Software Engineering")
         
     def test_request_quota_view(self):
         """Test the quota request process for a course with available seats."""
-        self.client.login(username="student1", password="testpassword")
+        self.client.login(username="student", password="11111111")
         response = self.client.post(reverse('request_quota', args=[self.course.id]))
         
         # Verify quota request was created and seats updated
@@ -92,7 +90,7 @@ class CourseViewsTest(TestCase):
 
     def test_cancel_quota_view(self):
         """Test cancellation of a quota request and seat reallocation."""
-        self.client.login(username="student1", password="testpassword")
+        self.client.login(username="student", password="11111111")
         quota_request = QuotaRequest.objects.create(student=self.student, course=self.course, status="pending")
         response = self.client.post(reverse('cancel_quota', args=[quota_request.id]))
         
@@ -104,30 +102,30 @@ class CourseViewsTest(TestCase):
 
     def test_student_quota_list_view(self):
         """Test that a student can view their quota requests."""
-        self.client.login(username="student1", password="testpassword")
+        self.client.login(username="student", password="11111111")
         QuotaRequest.objects.create(student=self.student, course=self.course, status="pending")
         
         response = self.client.get(reverse('student_quota_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Machine Learning")
+        self.assertContains(response, "Software Engineering")
 
     def test_admin_dashboard_view(self):
         """Test the admin dashboard view for access and data."""
-        self.client.login(username="admin", password="adminpassword")
+        self.client.login(username="admin", password="00000000")
         QuotaRequest.objects.create(student=self.student, course=self.course, status="pending")
         response = self.client.get(reverse('admin_dashboard'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Machine Learning")
+        self.assertContains(response, "Software Engineering")
         self.assertContains(response, "total_requests")
 
 class RequestQuotaViewTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.student = User.objects.create_user(username="student1", password="testpassword")
+        self.student = User.objects.create_user(username="student", password="11111111")
         self.course = Course.objects.create(
-            code="CS103",
-            name="Machine Learning",
-            semester="Fall",
+            code="CN331",
+            name="Software Engineering",
+            semester="1",
             academic_year=2024,
             total_quota=10,
             available_seats=0,  # No available seats to trigger line 19
@@ -136,7 +134,7 @@ class RequestQuotaViewTest(TestCase):
 
     def test_request_quota_no_seats(self):
         """Test that the view redirects when no seats are available."""
-        self.client.login(username="student1", password="testpassword")
+        self.client.login(username="student", password="11111111")
         response = self.client.post(reverse('request_quota', args=[self.course.id]))
         
 
@@ -145,11 +143,11 @@ class RequestQuotaViewTest(TestCase):
 class CancelQuotaViewTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.student = User.objects.create_user(username="student1", password="testpassword")
+        self.student = User.objects.create_user(username="student", password="11111111")
         self.course = Course.objects.create(
-            code="CS104",
-            name="Data Science",
-            semester="Spring",
+            code="CN331",
+            name="Software Engineering",
+            semester="1",
             academic_year=2024,
             total_quota=15,
             available_seats=1,  # Only 1 seat initially
@@ -160,7 +158,7 @@ class CancelQuotaViewTest(TestCase):
 
     def test_cancel_quota_increases_seats(self):
         """Test that canceling a quota request increases available seats."""
-        self.client.login(username="student1", password="testpassword")
+        self.client.login(username="student", password="11111111")
         response = self.client.post(reverse('cancel_quota', args=[self.quota_request.id]))
         
         # Confirm redirect and updated seat count
@@ -174,12 +172,12 @@ class AdminDashboardViewTest(TestCase):
         self.client = Client()
         
         # Create a staff (admin) user and a regular user
-        self.admin_user = User.objects.create_user(username="admin", password="adminpassword", is_staff=True)
-        self.regular_user = User.objects.create_user(username="student", password="studentpassword", is_staff=False)
+        self.admin_user = User.objects.create_user(username="admin", password="00000000", is_staff=True)
+        self.regular_user = User.objects.create_user(username="student", password="11111111", is_staff=False)
 
     def test_admin_dashboard_template_for_non_staff_user(self):
         """Test that a non-staff user is denied access and sees the 403 template."""
-        self.client.login(username="student", password="studentpassword")
+        self.client.login(username="student", password="11111111")
         response = self.client.get(reverse('admin_dashboard'))
         
         # Check the correct template and 403 status
