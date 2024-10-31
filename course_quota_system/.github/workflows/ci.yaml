@@ -47,4 +47,3 @@ jobs:
       run: |
        coverage run --source='quota' manage.py test
        coverage report
-          
