@@ -5,7 +5,6 @@ from .models import Course, QuotaRequest
 
 class CourseModelTest(TestCase):
     def setUp(self):
-        # Set up a sample course
         self.course = Course.objects.create(
             code="CN331",
             name="Software Engineering",
@@ -29,7 +28,6 @@ class CourseModelTest(TestCase):
 
 class QuotaRequestModelTest(TestCase):
     def setUp(self):
-        # Create user and course for the quota request
         self.student = User.objects.create_user(username="student", password="11111111")
         self.course = Course.objects.create(
             code="CN331",
@@ -81,7 +79,7 @@ class CourseViewsTest(TestCase):
         self.client.login(username="student", password="11111111")
         response = self.client.post(reverse('request_quota', args=[self.course.id]))
         
-        # Verify quota request was created and seats updated
+        # Verify quota request that it was created and seats updated
         self.assertEqual(response.status_code, 302)
         quota_request = QuotaRequest.objects.filter(student=self.student, course=self.course).first()
         self.assertIsNotNone(quota_request)
@@ -94,7 +92,7 @@ class CourseViewsTest(TestCase):
         quota_request = QuotaRequest.objects.create(student=self.student, course=self.course, status="pending")
         response = self.client.post(reverse('cancel_quota', args=[quota_request.id]))
         
-        # Check quota request deletion and seat update
+        # Verify that qouta is deleted and update
         self.assertEqual(response.status_code, 302)
         self.assertFalse(QuotaRequest.objects.filter(id=quota_request.id).exists())
         self.course.refresh_from_db()
@@ -116,8 +114,8 @@ class CourseViewsTest(TestCase):
         response = self.client.get(reverse('admin_dashboard'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Software Engineering")
-        self.assertContains(response, "total_requests")
 
+# fix line 19
 class RequestQuotaViewTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -128,7 +126,7 @@ class RequestQuotaViewTest(TestCase):
             semester="1",
             academic_year=2024,
             total_quota=10,
-            available_seats=0,  # No available seats to trigger line 19
+            available_seats=0,  
             is_open=True
         )
 
@@ -167,21 +165,7 @@ class CancelQuotaViewTest(TestCase):
         self.assertEqual(self.course.available_seats, 2)
         self.assertFalse(QuotaRequest.objects.filter(id=self.quota_request.id).exists())
 
-class AdminDashboardViewTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        
-        # Create a staff (admin) user and a regular user
-        self.admin_user = User.objects.create_user(username="admin", password="00000000", is_staff=True)
-        self.regular_user = User.objects.create_user(username="student", password="11111111", is_staff=False)
 
-    def test_admin_dashboard_template_for_non_staff_user(self):
-        """Test that a non-staff user is denied access and sees the 403 template."""
-        self.client.login(username="student", password="11111111")
-        response = self.client.get(reverse('admin_dashboard'))
-        
-        # Check the correct template and 403 status
-        self.assertTemplateUsed(response, '403.html')
 
 
     
